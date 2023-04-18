@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <title>Document</title>
+    <script>
+        function Rjson() {
+            //read jsonfile
+            fetch('temp.json').then((response) => response.json()).then((json) => {
+                main(json);
+            });
+        }
+
+        function main(data) {
+            console.log(data);
+            i = document.getElementById('t');
+            size = 0;
+            //取得data中有幾筆資料
+            for (loop in data.RH) {
+                size++;
+            }
+            console.log(size); //顯示32
+            //判斷螢幕寬度
+            if (document.body.clientWidth <= 720) {
+                //手機寬度
+                i.innerHTML = phone(data, size);
+            } else {
+                //電腦寬度
+                i.innerHTML = PC(data, size);
+            }
+            //console.log(t);
+        }
+
+        function PC(data, size) {
+            t = '';
+            //每行跑一次迴圈
+            for (loop = 0; loop < size; loop++) {
+                //日期
+                if (loop == 0) {
+                    d = '日期';
+                } else {
+                    d = '3月' + loop + '日';
+                }
+                //將一行的資料寫入
+                t = t + '<div class="row">\
+                    <div class="col-1">' + d + '</div>\
+                    <div class="col-1">' + data.Temperature[loop] + '</div>\
+                    <div class="col-1">' + data.T_Max[loop] + '</div>\
+                    <div class="col-1">' + data.T_Max_Time[loop] + '</div>\
+                    <div class="col-1">' + data.T_Min[loop] + '</div>\
+                    <div class="col-1">' + data.T_Min_Time[loop] + '</div>\
+                    <div class="col-1">' + data.Precp[loop] + '</div>\
+                    <div class="col-1">' + data.PrecpHour[loop] + '</div>\
+                    <div class="col-1">' + data.RH[loop] + '</div>\
+                    <div class="col-1">' + data.StnPres[loop] + '</div>\
+                    <div class="col-1">' + data.SunShine[loop] + '</div>\
+                    <div class="col-1">' + data.UVI_Max[loop] + '</div>\
+                    </div>';
+            }
+            return t;
+        }
+
+        function phone(data, size) {
+            t = '';
+            //紀錄平均溫度與最高低溫
+            T_Max = 0;
+            T_Min = 100;
+            avg_T = 0;
+            //每行跑一次迴圈
+            for (loop = 0; loop < size; loop++) {
+                //日期
+                if (loop == 0) {
+                    d = '日期';
+                } else {
+                    d = '3月' + loop + '日';
+                    //紀錄平均溫度與最高低溫
+                    avg_T = avg_T + Number(data.Temperature[loop]);
+                    if (T_Max < data.T_Max[loop]) {
+                        T_Max = data.T_Max[loop];
+                    }
+                    if (T_Min > data.T_Min[loop]) {
+                        T_Min = data.T_Min[loop];
+                    }
+                }
+                //將一行的資料寫入
+                t = t + '<div class="row">\
+                    <div class="col-3">' + d + '</div>\
+                    <div class="col-3">' + data.Temperature[loop] + '</div>\
+                    <div class="col-3">' + data.T_Max[loop] + '</div>\
+                    <div class="col-3">' + data.T_Min[loop] + '</div>\
+                    </div>';
+            }
+            //將平均溫度與最高低溫寫入於最前面
+            t = '<div class="row">三月平均溫度 ' + avg_T / (size - 1) + '度</div>\
+            <div class="row">三月最高溫度 ' + T_Max + '度</div>\
+            <div class="row">三月最低溫度 ' + T_Min + '度</div>' + t;
+            return t;
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container" id="t">
+    </div>
+    <script>
+        Rjson();
+    </script>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+
+</html>

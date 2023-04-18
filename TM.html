@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <title>Document</title>
+    <style>
+        .container {
+            padding-bottom: 50px;
+        }
+    </style>
+    <script>
+        function t1() {
+            document.getElementById('t1').innerHTML = 'innerHTML';
+        }
+
+        function t2() {
+            document.getElementById('t2').style = 'background-color: lightblue';
+        }
+
+        function t3() {
+            document.getElementById('t3').className = 'bg-secondary';
+        }
+
+        function t4() {
+            i = document.getElementById('t4');
+            i.innerHTML = '\
+                <img src="1.png" style="width: 100%;">\
+                <p>這是貓</p>';
+            i.className = 'col-4 bg-secondary bg-opacity-50';
+            i.id = '';
+        }
+
+        function Rjson() {
+            //read jsonfile
+            fetch('temp.json').then((response) => response.json()).then((json) => {
+                t5(json);
+            });
+        }
+
+        function t5(data) {
+            console.log(data);
+            i = document.getElementById('t5');
+            t = '';
+            size = 0;
+            //取得data中有幾筆資料
+            for (loop in data.RH) {
+                size++;
+            }
+            console.log(size); //顯示32
+            //每行跑一次迴圈
+            for (loop = 0; loop < size; loop++) {
+                //日期
+                if (loop == 0) {
+                    d = '日期';
+                } else {
+                    d = '3月' + loop + '日';
+                }
+                //將一行的資料寫入
+                t = t + '<div class="row">\
+                    <div class="col-1">' + d + '</div>\
+                    <div class="col-1">' + data.Temperature[loop] + '</div>\
+                    <div class="col-1">' + data.T_Max[loop] + '</div>\
+                    <div class="col-1">' + data.T_Max_Time[loop] + '</div>\
+                    <div class="col-1">' + data.T_Min[loop] + '</div>\
+                    <div class="col-1">' + data.T_Min_Time[loop] + '</div>\
+                    <div class="col-1">' + data.Precp[loop] + '</div>\
+                    <div class="col-1">' + data.PrecpHour[loop] + '</div>\
+                    <div class="col-1">' + data.RH[loop] + '</div>\
+                    <div class="col-1">' + data.StnPres[loop] + '</div>\
+                    <div class="col-1">' + data.SunShine[loop] + '</div>\
+                    <div class="col-1">' + data.UVI_Max[loop] + '</div>\
+                    </div>';
+            }
+            i.innerHTML = t;
+            //console.log(t);
+        }
+
+        window.onload = function() {
+            if (document.body.clientWidth <= 720) {
+                alert('手機螢幕');
+            } else {
+                alert('電腦螢幕');
+            }
+            //t4();
+            //document.write('<div>123456789</div>');
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div id="t1">test1</div>
+        <button onclick="t1();">test1</button>
+        <p></p>
+        <div id="t2" style="background-color: lightgreen;">test2</div>
+        <button onclick="t2();">test2</button>
+        <p></p>
+        <div id="t3" class="bg-primary">test3</div>
+        <button onclick="t3();">test3</button>
+    </div>
+    <p>
+        <p></p>
+    </p>
+    <div class="container">
+        <div class="row">
+            <div class="col-4 bg-secondary bg-opacity-50">
+                <img src="1.png" style="width: 100%;">
+                <p>這是貓</p>
+            </div>
+        </div>
+    </div>
+    <p>
+        <p></p>
+    </p>
+    <div class="container">
+        <div class="row">
+            <div id="t4">
+            </div>
+        </div>
+    </div>
+    <script>
+        t4();
+        //document.write('<div>123456789</div>');
+    </script>
+    <div class="container" id="t5">
+    </div>
+    <script>
+        Rjson();
+    </script>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+
+</html>
